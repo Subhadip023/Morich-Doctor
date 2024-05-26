@@ -31,7 +31,7 @@ def preprocess_image(image_path):
 # Route for the home page
 @app.route('/')
 def index():
-      ip_address = request.remote_addr
+    ip_address = request.remote_addr
 
     # Generate QR code
     qr = qrcode.QRCode(
