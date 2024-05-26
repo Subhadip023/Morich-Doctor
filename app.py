@@ -9,7 +9,7 @@ import joblib
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 
-# Set up logging  
+# Set up logging
 logging.basicConfig(level=logging.INFO)
 
 # Load your trained models
