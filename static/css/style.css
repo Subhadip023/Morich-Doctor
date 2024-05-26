@@ -82,14 +82,22 @@ input[type="submit"] {
 
 .Result{
     padding: 10px;
-background: greenyellow;
+/* background: greenyellow; */
 margin-bottom: 5vh;
 display: flex;
 flex-direction: column;
+gap: 5px;
+}
+
+.Result p{
+    padding-top: 10px;
+    text-align: center;
+    color: #3498db;
+    font-size: 20px;
 }
 .Result img{
-    height: 40vh;
-    width: 40vw;
+    height: 35vh;
+    width: 35vw;
 }
 
 

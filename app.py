@@ -1,5 +1,7 @@
 import os
 import logging
+import qrcode
+
 from flask import Flask, request, render_template, redirect, url_for
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from tensorflow.keras.models import load_model
@@ -29,6 +31,22 @@ def preprocess_image(image_path):
 # Route for the home page
 @app.route('/')
 def index():
+      ip_address = request.remote_addr
+
+    # Generate QR code
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(ip_address)
+    qr.make(fit=True)
+    qr_img = qr.make_image(fill_color="black", back_color="white")
+
+    # Save QR code image temporarily
+    qr_img_path = os.path.join(app.config['UPLOAD_FOLDER'], 'ip_qr.png')
+    qr_img.save(qr_img_path)
     return render_template('index.html')
 
 # Route to handle image upload and prediction
