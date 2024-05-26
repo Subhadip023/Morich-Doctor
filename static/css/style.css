@@ -1,22 +1,65 @@
 /* style.css */
+
+*{
+    margin: 0;
+    padding: 0;
+    color:whitesmoke;
+    background: #000;
+}
 body {
     font-family: Arial, sans-serif;
 }
-
+.container{
+    /* background: red; */
+    margin: auto;
+    height: 100vh;
+    width: 70vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
 h1, h2 {
     text-align: center;
+}
+h1{
+    margin: 30px;
+    font-size: 50px;
 }
 
 form {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    flex-direction: column;
     margin-top: 20px;
+    /* background: green; */
+    padding: 10px;
 }
 
 input[type="file"] {
-    margin-bottom: 20px;
+    /* background: red; */
+    border: 2px solid green;
+    margin: 20px;
+    width: 400px;
+    max-height: 50px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+input[type="submit"] {
+    background-color:  rgb(73, 192, 0);
+    height: 50px;
+    width: 120px;
+    border-radius: 10px;
+    font-size: 20px;
+ }
+ 
+ input[type="submit"]:hover {
+    background-color:  rgb(1, 97, 65);
+    
+    font-size: 20.5px;
+ }
 
 .loader {
     border: 16px solid #f3f3f3;
@@ -35,4 +78,25 @@ input[type="file"] {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.Result{
+    padding: 10px;
+background: greenyellow;
+margin-bottom: 5vh;
+display: flex;
+flex-direction: column;
+}
+.Result img{
+    height: 40vh;
+    width: 40vw;
+}
+
+
+.image-preview {
+    max-width: 400px;
+    max-height:600px ;
+    margin-top: 20px;
+    border: 5px solid green;
+    margin-bottom: 5px;
 }

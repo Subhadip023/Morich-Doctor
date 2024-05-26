@@ -6,19 +6,44 @@
     <title>Image Classification and Regression</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <script>
+        function showLoader() {
+            document.getElementById('loader').style.display = 'block';
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('image-preview');
+                output.src = reader.result;
+                output.style.display = 'block';
+                document.getElementById('p-i').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
 </head>
 <body>
-    <h1>Image Classification and Regression</h1>
-    <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data" onsubmit="showLoader()">
-        <input type="file" name="file" required>
-        <input type="submit" value="Upload">
-    </form>
-    <div id="loader" class="loader"></div>
-    {% if classification_result and pip_prediction %}
-        <h2>Results:</h2>
-        <p>Classification Result: {{ classification_result }}</p>
-        <p>PIP(ppm) Prediction: {{ pip_prediction }}</p>
-        <img src="{{ image_url }}" alt="Uploaded Image" style="max-width: 400px;">
-    {% endif %}
+    <div class="container">
+        <h1>Image Classification and Regression</h1>
+        <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data" onsubmit="showLoader()">
+            <h2 id="p-i" style="display: none;">Preview</h2>
+            <img id="image-preview" class="image-preview" style="display: none;" alt="Image Preview">
+
+            <input type="file" name="file" onchange="previewImage(event)" required>
+            <input type="submit" value="Upload">
+        </form>
+        <div id="loader" class="loader"></div>
+        <div class="Result">
+            {% if classification_result and pip_prediction %}
+                <h2>Results:</h2>
+                <p>Classification Result: {{ classification_result }}</p>
+                <p>PIP(ppm) Prediction: {{ pip_prediction }}</p>
+                <img src="{{ image_url }}" alt="Uploaded Image" style="max-width: 400px;">
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>
