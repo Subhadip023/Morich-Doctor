@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Classification and Regression</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+    <h1>Image Classification and Regression</h1>
+    <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data" onsubmit="showLoader()">
+        <input type="file" name="file" required>
+        <input type="submit" value="Upload">
+    </form>
+    <div id="loader" class="loader"></div>
+    {% if classification_result and pip_prediction %}
+        <h2>Results:</h2>
+        <p>Classification Result: {{ classification_result }}</p>
+        <p>PIP(ppm) Prediction: {{ pip_prediction }}</p>
+        <img src="{{ image_url }}" alt="Uploaded Image" style="max-width: 400px;">
+    {% endif %}
+</body>
+</html>
