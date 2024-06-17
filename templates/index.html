@@ -27,10 +27,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>Image Classification and Regression</h1>
+        <h1>Quality Evaluation of Black Pepper Using Machine Vision and
+            Learning</h1>
         <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data" onsubmit="showLoader()">
             <h2 id="p-i" style="display: none;">Preview</h2>
-            <img id="image-preview" class="image-preview" style="display: none;" alt="Image Preview">
+            <img  src="{{ url_for('static', filename='js/17.jpg') }}" id="image-preview" class="image-preview"  alt="Image Preview">
 
             <input type="file" name="file" onchange="previewImage(event)" required>
             <input type="submit" value="Upload">

@@ -1,8 +1,8 @@
 import os
 import logging
-import qrcode
-
+import socket
 from flask import Flask, request, render_template, redirect, url_for
+import qrcode
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from tensorflow.keras.models import load_model
 import numpy as np
@@ -28,10 +28,24 @@ def preprocess_image(image_path):
     img_array = img_array / 255.0
     return img_array
 
+# Function to get the local network IP address
+def get_local_ip_address():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # connect() for UDP doesn't send packets
+        s.connect(('10.0.0.1', 1))
+        ip_address = s.getsockname()[0]
+    except Exception:
+        ip_address = '127.0.0.1'
+    finally:
+        s.close()
+    return ip_address
+
 # Route for the home page
 @app.route('/')
 def index():
-    ip_address = request.remote_addr
+    ip_address = get_local_ip_address()
+    print(get_local_ip_address())
 
     # Generate QR code
     qr = qrcode.QRCode(
@@ -44,10 +58,17 @@ def index():
     qr.make(fit=True)
     qr_img = qr.make_image(fill_color="black", back_color="white")
 
-    # Save QR code image temporarily
-    qr_img_path = os.path.join(app.config['UPLOAD_FOLDER'], 'ip_qr.png')
+    # Delete previous QR code image if exists
+    for filename in os.listdir(app.config['UPLOAD_FOLDER']):
+        if filename.startswith('ip_qr_'):
+            file_path_to_delete = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            os.remove(file_path_to_delete)
+
+    # Save QR code image with a unique name
+    qr_img_path = os.path.join(app.config['UPLOAD_FOLDER'], f'ip_qr_{ip_address}.png')
     qr_img.save(qr_img_path)
-    return render_template('index.html')
+
+    return render_template('index.html', qr_img_path=qr_img_path)
 
 # Route to handle image upload and prediction
 @app.route('/predict', methods=['POST'])
@@ -63,6 +84,13 @@ def predict():
     
     if file:
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        
+        # Delete previous images if they exist
+        for filename in os.listdir(app.config['UPLOAD_FOLDER']):
+            if filename != file.filename and not filename.startswith('ip_qr_'):
+                file_path_to_delete = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                os.remove(file_path_to_delete)
+        
         file.save(file_path)
         
         # Preprocess the image for classification
@@ -92,4 +120,4 @@ def predict():
         return render_template('index.html', classification_result=classification_result, pip_prediction=pip_prediction.round(4), image_url=file_path)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
